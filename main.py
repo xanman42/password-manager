@@ -2,7 +2,12 @@ from tkinter import *
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
-
+def save():
+    string = f"{input_web.get()} | {input_email.get()} | {input_pass.get()} \n"
+    with open("data.txt", 'a') as data:
+        data.write(string)
+    input_web.delete(0, 'end')
+    input_pass.delete(0, 'end')
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title('Password manager')
@@ -11,7 +16,6 @@ window.config(padx=40, pady=40)
 canvas = Canvas(width=200, height=200, highlightthickness=0)
 lock = PhotoImage(file='logo.png')
 canvas.create_image(100, 100, image=lock)
-#timer_text = canvas.create_text(100, 130, text='00:00', fill='white', font=(FONT_NAME, 35, 'bold'))
 canvas.grid(column=1, row=0, )
 
 webs_lbl = Label(text='Website:')
@@ -32,7 +36,7 @@ input_pass.grid(column=1, row=3)
 
 generate_button = Button(text='Generate Password')
 generate_button.grid(column=2, row=3)
-add_button = Button(text='Add', width=34)
+add_button = Button(text='Add', width=34, command=save)
 add_button.grid(column=1, row=4, columnspan=2)
 
 
