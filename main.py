@@ -1,13 +1,22 @@
 from tkinter import *
+from tkinter import messagebox
+
+
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
     string = f"{input_web.get()} | {input_email.get()} | {input_pass.get()} \n"
-    with open("data.txt", 'a') as data:
-        data.write(string)
-    input_web.delete(0, 'end')
+
+    is_yes = messagebox.askyesno(title='Are you sure?', message=f'Are you sure this information is correct?\n {string}')
+    if is_yes:
+        with open("data.txt", 'a') as data:
+            data.write(string)
+
+    input_web.delete(0, END)
     input_pass.delete(0, 'end')
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title('Password manager')
@@ -38,6 +47,5 @@ generate_button = Button(text='Generate Password')
 generate_button.grid(column=2, row=3)
 add_button = Button(text='Add', width=34, command=save)
 add_button.grid(column=1, row=4, columnspan=2)
-
 
 window.mainloop()
