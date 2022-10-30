@@ -6,15 +6,22 @@ from tkinter import messagebox
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    string = f"{input_web.get()} | {input_email.get()} | {input_pass.get()} \n"
+    web = input_web.get()
+    email = input_email.get()
+    password = input_pass.get()
 
-    is_yes = messagebox.askyesno(title='Are you sure?', message=f'Are you sure this information is correct?\n {string}')
+    if len(web) < 1 or len(password) < 1:
+        messagebox.showerror(title='Fields empty', message="Please don't leave any empty fields")
+        return
+
+    is_yes = messagebox.askyesno(title=web, message=f'Are you sure this information is correct?\n'
+                                                    f'Email: {email}\nPassword: {password}')
     if is_yes:
         with open("data.txt", 'a') as data:
-            data.write(string)
+            data.write(f"{web} | {email} | {password} \n")
 
-    input_web.delete(0, END)
-    input_pass.delete(0, 'end')
+        input_web.delete(0, END)
+        input_pass.delete(0, 'end')
 
 
 # ---------------------------- UI SETUP ------------------------------- #
