@@ -28,7 +28,7 @@ def generate():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    website = input_web.get()
+    website = input_web.get().title()
     email = input_email.get()
     password = input_pass.get()
     new_data = {
@@ -43,7 +43,7 @@ def save():
         return
 
     is_yes = messagebox.askyesno(title=website, message=f'Are you sure this information is correct?\n'
-                                                    f'Email: {email}\nPassword: {password}')
+                                                        f'Email: {email}\nPassword: {password}')
     if is_yes:
         try:
             with open("data.json", 'r') as data_file:
@@ -62,6 +62,24 @@ def save():
         finally:
             input_web.delete(0, END)
             input_pass.delete(0, 'end')
+
+
+# ----------------------------- SEARCH -------------------------------- #
+def search():
+    page = input_web.get().title()
+    try:
+        with open("data.json", "r") as data:
+            data_dict = json.load(data)
+            page_data = data_dict[page]
+    except KeyError:
+        messagebox.showerror(title='non existent', message=f'There is no saved password for: {page}')
+    except FileNotFoundError:
+        messagebox.showerror(title='non existent', message=f'There are no saved passwords yet')
+    else:
+        messagebox.askokcancel(title=page, message=f'Your Login details for {page} are:\n'
+                                                    f'Email: {page_data["email"]}\nPassword: {page_data["password"]}\n'
+                                                    f'Would you like to copy the password to the clipboard?')
+        pyperclip.copy(page_data["password"])
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -94,7 +112,7 @@ generate_button = Button(text='Generate Password', command=generate)
 generate_button.grid(column=2, row=3)
 add_button = Button(text='Add', width=34, command=save)
 add_button.grid(column=1, row=4, columnspan=2)
-search_button = Button(text='Search', width=14)
+search_button = Button(text='Search', width=14, command=search)
 search_button.grid(column=2, row=1)
 
 window.mainloop()
